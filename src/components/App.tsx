@@ -1,18 +1,33 @@
 import { useState } from "react";
+import { nanoid } from "nanoid";
 import "./App.css";
 import Keyboard from "./Keyboard";
-// import Keyboard from "react-simple-keyboard";
-// import "react-simple-keyboard/build/css/index.css";
 
 function App() {
-  const alpha: number[] = Array.from(Array(26)).map((e, i) => i + 65);
-  const alphabet: string[] = alpha.map((x) => String.fromCharCode(x));
-
-  const [keyboard, setKeyboard] = useState();
   const [secretWord, setSecretWord] = useState("hangman");
+  const [key, setKey] = useState();
 
-  const keyboardElements = alphabet.map((letter: string) => (
-    <Keyboard value={letter} />
+  function handleClick(x) {
+    console.log("Key: " + generateKeyboard() + " clicked");
+  }
+
+  function generateKeyboard() {
+    const keyboardArr = [];
+    const alpha: number[] = Array.from(Array(26)).map((e, i) => i + 65);
+    const alphabet: string[] = alpha.map((x) => String.fromCharCode(x));
+
+    return {
+      value: alphabet,
+      id: nanoid(),
+    };
+  }
+
+  const keyboardElements = alphabet.map((x: string) => (
+    <Keyboard
+      key={x.id}
+      value={x.value}
+      handleClick={() => handleClick(x.id)}
+    />
   ));
 
   return (
