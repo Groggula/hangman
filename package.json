@@ -11,7 +11,8 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-simple-keyboard": "^3.4.244"
+    "react-simple-keyboard": "^3.4.244",
+    "simple-keyboard": "^3.4.198"
   },
   "devDependencies": {
     "@types/react": "^18.0.22",

@@ -2,32 +2,43 @@ import { useState } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import Keyboard from "./Keyboard";
+// import Keyboard from 'simple-keyboard';
+// import 'simple-keyboard/build/css/index.css';
 
 function App() {
-  const [secretWord, setSecretWord] = useState("hangman");
-  const [key, setKey] = useState();
+  // const alpha: number[] = Array.from(Array(26)).map((id, i) => i + 65);
+  // const alphabet: string[] = alpha.map((x) => String.fromCharCode(x));
+  const [secretWord, setSecretWord] = useState("HANGMAN");
+  const [keyboard, setKeyboard] = useState(generateKeyboard());
 
-  function handleClick(x) {
-    console.log("Key: " + generateKeyboard() + " clicked");
+  const keyId = keyboard.map((letter) => {
+    const id = nanoid();
+    return {
+      letter,
+      id: id,
+    };
+  });
+
+  function handleClick(id: any) {
+    keyId.map((key) => key.id === id);
+    {
+      console.log("key " + id.letter + " pressed");
+    }
   }
 
   function generateKeyboard() {
-    const keyboardArr = [];
-    const alpha: number[] = Array.from(Array(26)).map((e, i) => i + 65);
-    const alphabet: string[] = alpha.map((x) => String.fromCharCode(x));
+    const keyboardArr: string[] = [];
 
-    return {
-      value: alphabet,
-      id: nanoid(),
-    };
+    for (let i = 65; i <= 90; i++) {
+      const char = String.fromCharCode(i);
+
+      keyboardArr.push(char);
+    }
+    return keyboardArr;
   }
 
-  const keyboardElements = alphabet.map((x: string) => (
-    <Keyboard
-      key={x.id}
-      value={x.value}
-      handleClick={() => handleClick(x.id)}
-    />
+  const keyboardElements = keyId.map((x) => (
+    <Keyboard key={x.id} value={x.letter} handleClick={() => handleClick(x)} />
   ));
 
   return (
