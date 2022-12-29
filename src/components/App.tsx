@@ -1,53 +1,143 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import Keyboard from "./Keyboard";
-// import Keyboard from 'simple-keyboard';
-// import 'simple-keyboard/build/css/index.css';
+import Confetti from "react-confetti";
+
+interface IKeyboard {
+  letter: string;
+  id: string;
+  isRight: boolean;
+  isWrong: boolean;
+}
 
 function App() {
-  // const alpha: number[] = Array.from(Array(26)).map((id, i) => i + 65);
-  // const alphabet: string[] = alpha.map((x) => String.fromCharCode(x));
-  const [secretWord, setSecretWord] = useState("HANGMAN");
-  const [keyboard, setKeyboard] = useState(generateKeyboard());
+  const [secretWord, setSecretWord] = useState<string>("");
+  const [keyboard, setKeyboard] = useState<IKeyboard[]>(generateKeyboard());
+  const [correctGuesses, setCorrectGuesses] = useState<string[]>([]);
+  const [count, setCount] = useState<number>(10);
+  const [win, setWin] = useState<boolean>(false);
+  const [fail, setFail] = useState<boolean>(false);
 
-  const keyId = keyboard.map((letter) => {
-    const id = nanoid();
-    return {
-      letter,
-      id: id,
-    };
-  });
+  useEffect(() => {
+    fetch("https://random-word-api.herokuapp.com/word")
+      .then((res) => res.json())
+      .then((data) => setSecretWord(JSON.stringify(data).toUpperCase()));
+  }, [keyboard]);
 
-  function handleClick(id: any) {
-    keyId.map((key) => key.id === id);
-    {
-      console.log("key " + id.letter + " pressed");
+  const hiddenSecretWord = secretWord
+    .replace(/"/gi, "")
+    .replace("[", "")
+    .replace("]", "")
+    .split("")
+    .map((letter) => (correctGuesses.includes(letter) ? letter : "_"))
+    .join(" ");
+
+  // check for winning-condition each time a correct guess is made
+  useEffect(() => {
+    if (hiddenSecretWord.includes("_")) {
+      setWin(false);
+    } else setWin(true);
+  }, [hiddenSecretWord]);
+
+  // check for game over-condition each time count updates
+  useEffect(() => {
+    if (count == 0) {
+      setFail(true);
     }
-  }
+  }, [count]);
 
   function generateKeyboard() {
     const keyboardArr: string[] = [];
 
     for (let i = 65; i <= 90; i++) {
-      const char = String.fromCharCode(i);
+      const letter = String.fromCharCode(i);
 
-      keyboardArr.push(char);
+      keyboardArr.push(letter);
     }
-    return keyboardArr;
+    return keyboardArr.map((letter) => {
+      return {
+        letter,
+        id: nanoid(),
+        isRight: false,
+        isWrong: false,
+      };
+    });
   }
 
-  const keyboardElements = keyId.map((x) => (
-    <Keyboard key={x.id} value={x.letter} handleClick={() => handleClick(x)} />
-  ));
+  function handleClick(id: any) {
+    keyboard.map((letter) => letter.id === id);
+
+    {
+      if (secretWord.includes(id.letter)) {
+        setCorrectGuesses([...correctGuesses, id.letter]);
+        id.isRight = true;
+      } else {
+        setCount(count - 1);
+
+        id.isWrong = true;
+      }
+    }
+  }
+
+  function restartGame() {
+    // reset everything to default values
+    setFail(false);
+    setWin(false);
+    setCount(10);
+    setCorrectGuesses([]);
+    setKeyboard(generateKeyboard());
+  }
+
+  const winElement = (
+    <>
+      <Confetti />
+      <h1>CONGRATULATIONS!</h1>
+      <div className="restart-btn" onClick={() => restartGame()}>
+        <h2 className="key">Play again</h2>
+      </div>
+    </>
+  );
+
+  const failElement = (
+    <>
+      <h1>GAME OVER!</h1>
+      <div className="restart-btn" onClick={() => restartGame()}>
+        <h2 className="key">Play again</h2>
+      </div>
+    </>
+  );
 
   return (
-    <main>
-      <h1 className="title">Hangman</h1>
-      <p className="instructions">Find the right word or he will hang!</p>
-      <h1>_ _ _ _ _ _ _</h1>
-      <div className="keyboard-container">{keyboardElements}</div>
-    </main>
+    <>
+      <main>
+        <h1 className="title">Hangman</h1>
+
+        {win ? (
+          winElement
+        ) : fail ? (
+          failElement
+        ) : (
+          <>
+            <h3 className="instructions">{count} guesses left!</h3>
+            <h1>{hiddenSecretWord}</h1>
+
+            <div className="keyboard-container">
+              {keyboard.map((x) => (
+                <Keyboard
+                  key={x.id}
+                  value={x.letter}
+                  isWrong={x.isWrong}
+                  isRight={x.isRight}
+                  handleClick={() => handleClick(x)}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        <p>©2022 Greve Groggula</p>
+      </main>
+    </>
   );
 }
 
