@@ -11,10 +11,16 @@ Live preview [here](https://tangerine-quokka-cf24f3.netlify.app/)
 
 ## Installation
 
-
+Project is created with Vite + React + Typescript. Nanoid is used for generating different ID's for all the keys on the keyboard. React-Confetti is used when the player wins.
 
 ```sh
-npm install hangman --save
+npm create vite@latest
+```
+Follow the instructions and name the project
+
+```sh
+cd project-name
+npm install nanoid react-confetti
 ```
 
 
@@ -28,16 +34,7 @@ _For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Development setup
 
-Project is created with Vite + React + Typescript. Nanoid is used for generating different ID's for all the keys on the keyboard. React-Confetti is used when the player wins.
-
 ```sh
-npm create vite@latest
-```
-Follow the instructions and name the project
-
-```sh
-cd project-name
-npm install nanoid react-confetti
 npm run dev
 ```
 
