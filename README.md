@@ -9,20 +9,6 @@ Live preview [here](https://tangerine-quokka-cf24f3.netlify.app/)
 
 ![](header.png)
 
-## Installation
-
-Project is created with Vite + React + Typescript. Nanoid is used for generating different ID's for all the keys on the keyboard. React-Confetti is used when the player wins.
-
-```sh
-npm create vite@latest
-```
-Follow the instructions and name the project
-
-```sh
-cd project-name
-npm install nanoid react-confetti
-```
-
 
 ## Usage example
 
@@ -42,21 +28,4 @@ npm run dev
 
 * 1.0.0
     * First proper release of final product
-
-## Meta
-
-Seb – therealsebastard@gmail.com
-
-Distributed under the MIT license. See ``LICENSE`` for more information.
-
-[https://github.com/Groggula](https://github.com/Groggula)
-
-## Contributing
-
-1. Fork it (<https://github.com/Groggula/hangman/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
 
