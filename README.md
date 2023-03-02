@@ -5,7 +5,7 @@
 The game fetches a random word taken from [RandomWordAPI](https://random-word-api.herokuapp.com/).
 The player then has 10 tries to guess the right word, one letter at a time.
 
-Live preview [here](https://tangerine-quokka-cf24f3.netlify.app/) 
+Live preview [here](https://simplehangman.netlify.app/) 
 
 ![](header.png)
 
